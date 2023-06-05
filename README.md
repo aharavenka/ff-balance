@@ -46,10 +46,6 @@ composer install
 ```shell
 docker-compose up mysql mysql_test --build -d
 ```
-* для последующих запусков достаточно будет
-```shell
-docker-compose up mysql mysql_test -d
-```
 6. Выполнить инициализацию с применением миграций
 ```shell
 ./yii init
@@ -57,6 +53,10 @@ docker-compose up mysql mysql_test -d
 7. Запустить остальные контейнеры
 ```shell
 docker-compose up mysql mysql_test --build -d
+```
+* для последующих запусков достаточно будет
+```shell
+docker-compose up -d
 ```
 8. Для завершения контейнеров воспользоваться командой
 ```shell
