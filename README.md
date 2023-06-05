@@ -39,22 +39,26 @@
 <li>Произвести подготовку: установить Composer и Docker</li>
 <li>Склонировать проект из репозитория</li>
 <li>Перейти в папку с проектом и запустить команду 
+
 ```shell
 composer install
 ```
 </li>
 <li>Скопируйте файл .env.example в .env</li>
 <li>Запустить контейнеры баз данных в Докере командой
+
 ```shell
 docker-compose up mysql mysql_test --build -d
 ```
 </li>
 <li>Выполнить инициализацию с применением миграций
+
 ```shell
 ./yii init
 ```
 </li>
 <li>Запустить остальные контейнеры
+
 ```shell
 docker-compose up --build -d
 ```
@@ -64,6 +68,7 @@ docker-compose up -d
 ```
 </li>
 <li>Для завершения контейнеров воспользоваться командой
+
 ```shell
 docker-compose down
 ```
