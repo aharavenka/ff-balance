@@ -52,7 +52,7 @@ docker-compose up mysql mysql_test --build -d
 ```
 7. Запустить остальные контейнеры
 ```shell
-docker-compose up mysql mysql_test --build -d
+docker-compose up --build -d
 ```
 * для последующих запусков достаточно будет
 ```shell
