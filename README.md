@@ -28,7 +28,7 @@
 <ul>
     <li>Yii2 фреймворк</li>
     <li>Mysql</li>
-    <li>Транхакции Mysql</li>
+    <li>Транзакции Mysql</li>
     <li>RabbitMQ</li>
     <li>Codeception</li>
     <li>Docker</li>
