@@ -41,7 +41,8 @@
 ```shell
 composer install
 ```
-4. Запустить контейнеры баз данных в Докере командой
+4. Скопируйте файл .env.example в .env
+5. Запустить контейнеры баз данных в Докере командой
 ```shell
 docker-compose up mysql mysql_test --build -d
 ```
@@ -49,15 +50,15 @@ docker-compose up mysql mysql_test --build -d
 ```shell
 docker-compose up mysql mysql_test -d
 ```
-5. Выполнить инициализацию с применением миграций
+6. Выполнить инициализацию с применением миграций
 ```shell
 ./yii init
 ```
-6. Запустить остальные контейнеры
+7. Запустить остальные контейнеры
 ```shell
 docker-compose up mysql mysql_test --build -d
 ```
-7. Для завершения контейнеров воспользоваться командой
+8. Для завершения контейнеров воспользоваться командой
 ```shell
 docker-compose down
 ```

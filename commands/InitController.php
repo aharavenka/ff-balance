@@ -19,9 +19,9 @@ class InitController extends Controller
     public function actionIndex(): void
     {
         $this->actionMigrate();
-        $this->actionCopyEnvFile();
         $this->actionGenerateUsers();
         $this->actionSetPermissions();
+        $this->actionUpdateEnvFile();
 
         $this->stdout("Initialization completed successfully.\n", BaseConsole::FG_GREEN);
     }
@@ -41,17 +41,23 @@ class InitController extends Controller
         Yii::$app->set('db', $db);
     }
 
-    public function actionCopyEnvFile(): void
+    public function actionUpdateEnvFile(): void
     {
         $envFilePath = Yii::getAlias('@app/.env');
-        $exampleEnvFilePath = Yii::getAlias('@app/.env.example');
+        $content = file_get_contents($envFilePath);
 
-        if (!file_exists($envFilePath) && file_exists($exampleEnvFilePath)) {
-            copy($exampleEnvFilePath, $envFilePath);
-            $this->stdout(".env file copied successfully.\n", BaseConsole::FG_GREEN);
-        } else {
-            $this->stdout(".env file already exists or example file is missing.\n", BaseConsole::FG_YELLOW);
+        if ($content !== false) {
+            $lines = explode("\n", $content);
+            if (isset($lines[0])) {
+                $lines[0] = 'DB_HOST=mysql';
+                $updatedContent = implode("\n", $lines);
+                file_put_contents($envFilePath, $updatedContent);
+                $this->stdout(".env file updated successfully.\n", BaseConsole::FG_GREEN);
+                return;
+            }
         }
+
+        $this->stdout("Failed to update .env file.\n", BaseConsole::FG_RED);
     }
 
     public function actionGenerateUsers(): void
