@@ -1,9 +1,101 @@
-version: '2'
+version: '3.8'
+
 services:
-  php:
-    image: yiisoftware/yii2-php:7.4-apache
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
     volumes:
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      - ./:/app:delegated
+      - .:/var/www/html
+    depends_on:
+      - mysql
+      - rabbitmq
+    networks:
+      - project-network
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_root_pass
+      MYSQL_DATABASE: project_db_name
+      MYSQL_USER: project_user_name
+      MYSQL_PASSWORD: project_user_pass
     ports:
-      - '8000:80'
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - project-network
+
+  mysql_test:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_root_pass
+      MYSQL_DATABASE: project_test_db_name
+      MYSQL_USER: project_test_user_name
+      MYSQL_PASSWORD: project_test_user_pass
+    ports:
+      - "3307:3306"
+    networks:
+      - project-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit_user
+      - RABBITMQ_DEFAULT_PASS=rabbit_pass
+    networks:
+      - project-network
+
+  worker1:
+    build:
+      context: .
+      dockerfile: ./docker/worker/Dockerfile
+    environment:
+      - QUEUE_NAME=debit_queue
+    depends_on:
+      - mysql
+      - rabbitmq
+    volumes:
+      - .:/app
+    networks:
+      - project-network
+
+  worker2:
+    build:
+      context: .
+      dockerfile: ./docker/worker/Dockerfile
+    environment:
+      - QUEUE_NAME=credit_queue
+    depends_on:
+      - mysql
+      - rabbitmq
+    volumes:
+      - .:/app
+    networks:
+      - project-network
+
+  worker3:
+    build:
+      context: .
+      dockerfile: ./docker/worker/Dockerfile
+    environment:
+      - QUEUE_NAME=transfer_queue
+    depends_on:
+      - mysql
+      - rabbitmq
+    volumes:
+      - .:/app
+    networks:
+      - project-network
+
+networks:
+  project-network:
+
+volumes:
+  mysql-data:

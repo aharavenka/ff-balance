@@ -42,6 +42,13 @@ $config = [
             ],
         ],
         'db' => $db,
+        'rabbitmq' => [
+            'class' => 'app\components\RabbitMQService',
+            'host' => $_ENV['RABBITMQ_HOST'],
+            'port' => $_ENV['RABBITMQ_PORT'],
+            'username' => $_ENV['RABBITMQ_USERNAME'],
+            'password' => $_ENV['RABBITMQ_PASSWORD'],
+        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

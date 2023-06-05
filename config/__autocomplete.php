@@ -1,5 +1,8 @@
 <?php
 
+use yii\console\Application;
+use yii\web\User;
+
 /**
  * This class only exists here for IDE (PHPStorm/Netbeans/...) autocompletion.
  * This file is never included anywhere.
@@ -11,23 +14,31 @@
  * }
  * ```
  */
-class Yii {
-    /**
-     * @var \yii\web\Application|\yii\console\Application|__Application
-     */
-    public static $app;
+class Yii
+{
+    public static Application|__Application|\yii\web\Application $app;
 }
 
 /**
- * @property yii\rbac\DbManager $authManager 
- * @property \yii\web\User|__WebUser $user
- * 
+ * @property yii\rbac\DbManager $authManager
+ * @property User|__WebUser $user
+ *
  */
-class __Application {
+class __Application
+{
+    /**
+     * @var mixed|object|null
+     */
+    public mixed $rabbitmq;
+    /**
+     * @var mixed|object|null
+     */
+    public mixed $db_test;
 }
 
 /**
  * @property app\models\User $identity
  */
-class __WebUser {
+class __WebUser
+{
 }

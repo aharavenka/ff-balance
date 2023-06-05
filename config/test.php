@@ -1,4 +1,8 @@
 <?php
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/test_db.php';
 
@@ -40,6 +44,13 @@ return [
                 'domain' => 'localhost',
             ],
             */
+        ],
+        'rabbitmq' => [
+            'class' => 'app\components\RabbitMQService',
+            'host' => $_ENV['RABBITMQ_TEST_HOST'],
+            'port' => $_ENV['RABBITMQ_PORT'],
+            'username' => $_ENV['RABBITMQ_USERNAME'],
+            'password' => $_ENV['RABBITMQ_PASSWORD'],
         ],
     ],
     'params' => $params,

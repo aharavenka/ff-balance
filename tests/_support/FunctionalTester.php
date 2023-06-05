@@ -20,4 +20,31 @@ class FunctionalTester extends \Codeception\Actor
 {
     use _generated\FunctionalTesterActions;
 
+    public function seeInRabbitMQQueue($rabbitmq, $queue, $message): void
+    {
+        $messages = [];
+        try {
+            $rabbitmq->receive($queue, function ($msg) use (&$messages) {
+                $messages[] = $msg->getBody();
+                $msg->nack();
+            }, 1);
+        } catch (Throwable) {}
+        // Проверяем, содержит ли очередь заданное сообщение
+        $this->assertTrue(in_array($message, $messages), "Message '$message' not found in the '$queue' queue.");
+    }
+
+    public function dontSeeInRabbitMQQueue($rabbitmq, $queue, $message): void
+    {
+        $messages = [];
+        try {
+            $rabbitmq->receive($queue, function ($msg) use (&$messages) {
+                $messages[] = $msg->getBody();
+                $msg->ack();
+            }, 1);
+        } catch (Throwable) {}
+
+        // Проверяем, содержит ли очередь заданное сообщение
+        $this->assertFalse(in_array($message, $messages), "Message '$message' not found in the '$queue' queue.");
+    }
+
 }

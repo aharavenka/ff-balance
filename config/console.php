@@ -1,5 +1,8 @@
 <?php
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -10,7 +13,7 @@ $config = [
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
         '@tests' => '@app/tests',
     ],
     'components' => [
@@ -26,6 +29,22 @@ $config = [
             ],
         ],
         'db' => $db,
+        'db_test' => [
+            'class' => yii\db\Connection::class,
+            'dsn' => 'mysql:host=' . $_ENV['DB_TEST_HOST'] . ';port=' . $_ENV['DB_TEST_PORT']
+                . ';dbname=' . $_ENV['DB_TEST_DATABASE'],
+            'username' => $_ENV['DB_TEST_USERNAME'],
+            'password' => $_ENV['DB_TEST_PASSWORD'],
+            'charset' => 'utf8',
+            'enableSchemaCache' => YII_ENV_PROD,
+        ],
+        'rabbitmq' => [
+            'class' => 'app\components\RabbitMQService',
+            'host' => $_ENV['RABBITMQ_HOST'],
+            'port' => $_ENV['RABBITMQ_PORT'],
+            'username' => $_ENV['RABBITMQ_USERNAME'],
+            'password' => $_ENV['RABBITMQ_PASSWORD'],
+        ],
     ],
     'params' => $params,
     /*
